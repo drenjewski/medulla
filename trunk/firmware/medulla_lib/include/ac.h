@@ -18,7 +18,8 @@
 typedef struct {
 	AC_t *ac_port; /**< Pointer to the AC registers which this struct uses */
 	volatile uint8_t pin_0; /**< Zero indexed number for which pin to be read on comparator 0 */
-	volatile uint8_t pin_1; /**< Zero indexed number for which pin to be read on comparator 1 */
+	volatile uint8_t therm_comp; /**< Current value being set in the comparator */
+	volatile uint8_t therm_max; /**< Maximum value for EStop */
 } ac_port_t;
 
 /** @brief Initialize a port of AC inputs
@@ -40,7 +41,16 @@ ac_port_t ac_init_port(AC_t *ac, uint8_t therm_max);
  *  @param pin_a Zero indexed number of the pin to read on comparator 0.
  *	@param pin_b Zero indexed number of the pin to read on comparator 1.
  */
-void ac_set_pins(ac_port_t *ac, uint8_t pin_0, uint8_t pin_1);
+void ac_set_pins(ac_port_t *ac, uint8_t pin_0);
+
+/** @brief Sets the voltage to be compared on the port
+ *
+ *  This function configures a voltage to be compared on the port
+ *
+ *  @param ac Pointer to an ac_port_t struct to initialize the pins on.
+ *  @param therm_comp Voltage scaler setting to compare to
+ */
+void ac_set_comp(ac_port_t *ac, uint8_t therm_comp);
 
 /** @brief Checks the status of the comparators.
  *
@@ -51,6 +61,6 @@ void ac_set_pins(ac_port_t *ac, uint8_t pin_0, uint8_t pin_1);
  *	@param pin Selects which comparator to read (0 or 1)
  *	@return Returns a 1 if selected comparator is triggered.
  */
-bool ac_check_value(ac_port_t *ac, uint8_t pin);
+bool ac_check_value(ac_port_t *ac);
 
 #endif //ADC_H
